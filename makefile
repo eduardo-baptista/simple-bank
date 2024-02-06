@@ -5,3 +5,7 @@ test:
 .PHONY: start.dev
 start.dev:
 	docker compose watch
+
+.PHONY: generate
+generate:
+	go generate ./...
