@@ -8,4 +8,5 @@ type AccountRepository interface {
 	GetAccountByID(id string) (*entity.Account, error)
 	UpdateAccount(account *entity.Account) error
 	SaveAccount(account *entity.Account) error
+	DeleteAllAccounts() error
 }

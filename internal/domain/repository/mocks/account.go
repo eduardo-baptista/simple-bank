@@ -39,6 +39,20 @@ func (m *MockAccountRepository) EXPECT() *MockAccountRepositoryMockRecorder {
 	return m.recorder
 }
 
+// DeleteAllAccounts mocks base method.
+func (m *MockAccountRepository) DeleteAllAccounts() error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteAllAccounts")
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteAllAccounts indicates an expected call of DeleteAllAccounts.
+func (mr *MockAccountRepositoryMockRecorder) DeleteAllAccounts() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteAllAccounts", reflect.TypeOf((*MockAccountRepository)(nil).DeleteAllAccounts))
+}
+
 // GetAccountByID mocks base method.
 func (m *MockAccountRepository) GetAccountByID(id string) (*entity.Account, error) {
 	m.ctrl.T.Helper()
