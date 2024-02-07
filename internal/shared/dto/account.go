@@ -1,6 +1,6 @@
 package dto
 
 type AccountDTO struct {
-	ID      string
-	Balance int
+	ID      string `json:"id"`
+	Balance int    `json:"balance"`
 }

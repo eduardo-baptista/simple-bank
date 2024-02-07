@@ -23,12 +23,23 @@ func NewTestApp() *TestApp {
 
 	getBalanceUseCase := account.NewGetBalanceUseCase(accountRepository)
 	resetUseCase := account.NewResetUseCase(accountRepository)
+	depositUseCase := account.NewDepositUseCase(accountRepository)
+	withdrawUseCase := account.NewWithdrawUseCase(accountRepository)
+	transferUseCase := account.NewTransferUseCase(accountRepository)
+
 	balanceHandler := handlers.NewBalanceHandler(getBalanceUseCase)
 	resetHandler := handlers.NewResetHandler(resetUseCase)
+	eventHandler := handlers.NewEventHandler(
+		depositUseCase,
+		withdrawUseCase,
+		transferUseCase,
+	)
+
 	httpServer := appHttp.NewHTTPServer(
 		"3000",
 		balanceHandler,
 		resetHandler,
+		eventHandler,
 	)
 
 	return &TestApp{
@@ -41,3 +52,10 @@ func (a *TestApp) PerformRequest(res *httptest.ResponseRecorder, req *http.Reque
 	a.HTTPServer.Engine.ServeHTTP(res, req)
 }
 
+func (a *TestApp) NewJSONRequest(method, path string, body any) *http.Request {
+	jsonBody, _ := json.Marshal(body)
+	req := httptest.NewRequest(method, path, bytes.NewReader(jsonBody))
+	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+
+	return req
+}

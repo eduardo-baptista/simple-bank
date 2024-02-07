@@ -16,13 +16,23 @@ func main() {
 
 	getBalanceUseCase := usecase.NewGetBalanceUseCase(accountRepository)
 	resetUseCase := usecase.NewResetUseCase(accountRepository)
+	depositUseCase := usecase.NewDepositUseCase(accountRepository)
+	withdrawUseCase := usecase.NewWithdrawUseCase(accountRepository)
+	transferUseCase := usecase.NewTransferUseCase(accountRepository)
+
 	balanceHandler := handlers.NewBalanceHandler(getBalanceUseCase)
 	resetHandler := handlers.NewResetHandler(resetUseCase)
+	eventHandler := handlers.NewEventHandler(
+		depositUseCase,
+		withdrawUseCase,
+		transferUseCase,
+	)
 
 	httpServer := http.NewHTTPServer(
 		*port,
 		balanceHandler,
 		resetHandler,
+		eventHandler,
 	)
 
 	httpServer.Start()
