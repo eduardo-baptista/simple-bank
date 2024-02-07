@@ -14,11 +14,14 @@ func main() {
 
 	accountRepository := inmemory.NewAccountRepository()
 
+	getBalanceUseCase := usecase.NewGetBalanceUseCase(accountRepository)
 	resetUseCase := usecase.NewResetUseCase(accountRepository)
+	balanceHandler := handlers.NewBalanceHandler(getBalanceUseCase)
 	resetHandler := handlers.NewResetHandler(resetUseCase)
 
 	httpServer := http.NewHTTPServer(
 		*port,
+		balanceHandler,
 		resetHandler,
 	)
 

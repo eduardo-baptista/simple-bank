@@ -21,10 +21,13 @@ type TestApp struct {
 func NewTestApp() *TestApp {
 	accountRepository := inmemory.NewAccountRepository()
 
+	getBalanceUseCase := account.NewGetBalanceUseCase(accountRepository)
 	resetUseCase := account.NewResetUseCase(accountRepository)
+	balanceHandler := handlers.NewBalanceHandler(getBalanceUseCase)
 	resetHandler := handlers.NewResetHandler(resetUseCase)
 	httpServer := appHttp.NewHTTPServer(
 		"3000",
+		balanceHandler,
 		resetHandler,
 	)
 
