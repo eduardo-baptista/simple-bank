@@ -11,6 +11,14 @@ test.cover:
 start.dev:
 	docker compose watch
 
+.PHONY: start
+start:
+	docker compose up -d
+
+.PHONY: stop
+stop:
+	docker compose down -v --remove-orphans
+
 .PHONY: generate
 generate:
 	go generate ./...
