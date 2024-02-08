@@ -24,6 +24,7 @@ func NewHTTPServer(port string, handlers ...HTTPHandler) *HTTPServer {
 	}
 
 	server.Engine.Use(middleware.Logger())
+	server.Engine.Use(middleware.Recover())
 
 	for _, h := range handlers {
 		h.Setup(server.Engine)
