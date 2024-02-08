@@ -1,11 +1,16 @@
 package main
 
 import (
+	"context"
 	"flag"
+	"os"
+	"os/signal"
 	"simple-bank/internal/infrastructure/http"
 	handlers "simple-bank/internal/infrastructure/http/handler"
 	"simple-bank/internal/infrastructure/repository/inmemory"
 	usecase "simple-bank/internal/usecase/account"
+	"syscall"
+	"time"
 )
 
 func main() {
@@ -35,5 +40,16 @@ func main() {
 		eventHandler,
 	)
 
-	httpServer.Start()
+	go httpServer.Start()
+
+	stop := make(chan os.Signal)
+	signal.Notify(stop, os.Interrupt, syscall.SIGTERM, syscall.SIGINT)
+	<-stop
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*5)
+	defer cancel()
+
+	if err := httpServer.Stop(ctx); err != nil {
+		panic(err)
+	}
 }
